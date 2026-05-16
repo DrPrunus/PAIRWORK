@@ -1,20 +1,45 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 校园共享研讨室预约系统 (Campus Study Space)
 
-# Run and deploy your AI Studio app
+这是一个基于 React + Express + Tailwind CSS 构建的工业风/终端风格预约系统。
 
-This contains everything you need to run your app locally.
+## 🚀 快速开始
 
-View your app in AI Studio: https://ai.studio/apps/456f2eb5-4976-4113-b738-92cd7d8035c1
+### 1. 克隆项目
+```bash
+git clone <your-repo-url>
+cd <project-folder>
+```
 
-## Run Locally
+### 2. 安装依赖
+```bash
+npm install
+```
 
-**Prerequisites:**  Node.js
+### 3. 本地开发
+启动开发服务器（包含 Vite 前端中间件和 Express 后端）：
+```bash
+npm run dev
+```
+访问地址: [http://localhost:3000](http://localhost:3000)
 
+### 4. 生产环境构建
+```bash
+# 构建前端静态文件并打包后端 server.ts
+npm run build
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# 启动生产环境服务器
+npm start
+```
+
+## 🛠 技术栈
+- **前端**: React 19, Vite, Tailwind CSS (Design Theme: Bold Typography)
+- **后端**: Node.js (Express), tsx (Development)
+- **动效**: Motion (framer-motion)
+- **图标**: Lucide-React
+- **数据库**: Firebase Firestore (规划中)
+
+## 📋 结对编程说明
+本项目严格遵循结对编程规范，详细日志见 `AGENTS.md`。
+- **驾驶员**: 负责代码实现
+- **领航员**: 负责架构与评审
+- **角色互换**: 每 30-45 分钟进行一次角色切换。
