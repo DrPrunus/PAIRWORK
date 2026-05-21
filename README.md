@@ -67,11 +67,3 @@
 4. 启动开发服务器：npm run dev（默认端口 5173）
 
 确保后端已启动，前端即可正常请求接口，使用测试账号登录系统。
-
----
-
-### 作者
-
-- **邓浩文**
-
-- Gitee：[https://gitee.com/deng-hao-wen/course-selection-system](https://gitee.com/deng-hao-wen/course-selection-system)
