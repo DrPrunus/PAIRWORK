@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhw.courseselectionsystem.mapper.CourseSelectionMapper">
+
+    <select id="findSelectedCoursesByStudentId" resultType="com.dhw.courseselectionsystem.pojo.vo.MySelectionVO">
+        SELECT
+            c.id AS courseId,
+            c.name AS courseName,
+            t.name AS teacherName,
+            c.credit,
+            c.schedule,
+            cs.selection_time AS selectionTime,
+            cs.score
+        FROM course_selection cs
+                 JOIN course c ON cs.course_id = c.id
+                 LEFT JOIN teacher t ON c.teacher_id = t.id
+        WHERE cs.student_id = #{studentId} AND cs.status = 0
+        ORDER BY cs.selection_time DESC
+    </select>
+
+
+    <select id="findScoresByStudentId" resultType="com.dhw.courseselectionsystem.pojo.vo.ScoreVO">
+        SELECT
+            c.name AS courseName,
+            c.credit,
+            cs.score,
+            s.name AS semesterName
+        FROM course_selection cs
+                 JOIN course c ON cs.course_id = c.id
+                 JOIN semester s ON c.semester_id = s.id
+        WHERE cs.student_id = #{studentId} AND cs.score IS NOT NULL
+        ORDER BY cs.selection_time DESC
+    </select>
+
+
+    <update id="updateScore">
+        UPDATE course_selection
+        SET score = #{score}
+        WHERE course_id = #{courseId} AND student_id = #{studentId} AND status = 0
+    </update>
+
+
+    <select id="findStudentsByCourseId" resultType="com.dhw.courseselectionsystem.pojo.vo.CourseStudentVO">
+        SELECT
+            s.id AS studentId,
+            s.student_no AS studentNo,
+            s.name AS studentName,
+            s.major,
+            s.class_name AS className,
+            cs.score
+        FROM course_selection cs
+                 JOIN student s ON cs.student_id = s.id
+        WHERE cs.course_id = #{courseId} AND cs.status = 0
+        ORDER BY s.student_no
+    </select>
+
+</mapper>
