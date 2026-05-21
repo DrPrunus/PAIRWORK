@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: tlias-web-management
+  datasource:
+    url: jdbc:mysql://localhost:3306/course_db?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    #设置接收前端文件的大小限制
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 10MB
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名xxx_abc -> xxxAbc
+    map-underscore-to-camel-case: true
+
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    bucketName: web-ai-dhw
+    region: cn-beijing
+
+
+
