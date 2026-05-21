@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhw.courseselectionsystem.mapper.CourseMapper">
+
+    <resultMap id="CourseMap" type="com.dhw.courseselectionsystem.pojo.entity.Course">
+        <id column="id" property="id"/>
+        <result column="course_code" property="courseCode"/>
+        <result column="name" property="name"/>
+        <result column="credit" property="credit"/>
+        <result column="max_students" property="maxStudents"/>
+        <result column="current_students" property="currentStudents"/>
+        <result column="teacher_id" property="teacherId"/>
+        <result column="semester_id" property="semesterId"/>
+        <result column="schedule" property="schedule"/>
+        <result column="status" property="status"/>
+        <result column="teacher_name" property="teacherName"/>
+        <result column="semester_name" property="semesterName"/>
+    </resultMap>
+
+    <!-- 分页条件查询课程列表 -->
+    <select id="list" resultMap="CourseMap">
+        SELECT
+        c.*,
+        t.name as teacher_name,
+        s.name as semester_name
+        FROM course c
+        LEFT JOIN teacher t ON c.teacher_id = t.id
+        LEFT JOIN semester s ON c.semester_id = s.id
+        <where>
+            <if test="name != null and name != ''">
+                AND c.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="teacherId != null">
+                AND c.teacher_id = #{teacherId}
+            </if>
+            <if test="semesterId != null">
+                AND c.semester_id = #{semesterId}
+            </if>
+        </where>
+        ORDER BY c.id DESC
+    </select>
+
+    <!-- 根据ID查询课程 -->
+    <select id="findById" resultMap="CourseMap">
+        SELECT
+            c.*,
+            t.name as teacher_name,
+            s.name as semester_name
+        FROM course c
+                 LEFT JOIN teacher t ON c.teacher_id = t.id
+                 LEFT JOIN semester s ON c.semester_id = s.id
+        WHERE c.id = #{id}
+    </select>
+
+    <!-- 查询学生已选课程（用于冲突检测） -->
+    <select id="findSelectedCoursesByStudentId" resultMap="CourseMap">
+        SELECT
+            c.*,
+            t.name as teacher_name,
+            s.name as semester_name
+        FROM course c
+                 JOIN course_selection cs ON c.id = cs.course_id
+                 LEFT JOIN teacher t ON c.teacher_id = t.id
+                 LEFT JOIN semester s ON c.semester_id = s.id
+        WHERE cs.student_id = #{studentId} AND cs.status = 0
+    </select>
+
+    <!-- 乐观锁：课程人数+1，使用 CDATA 包裹比较符 -->
+    <update id="incrementCurrentStudents">
+        <![CDATA[
+        UPDATE course
+        SET current_students = current_students + 1
+        WHERE id = #{id} AND current_students < max_students
+        ]]>
+    </update>
+
+    <!-- 退课：课程人数-1 -->
+    <update id="decrementCurrentStudents">
+        <![CDATA[
+        UPDATE course
+        SET current_students = current_students - 1
+        WHERE id = #{id} AND current_students > 0
+        ]]>
+    </update>
+
+
+
+    <select id="findByTeacherId" resultMap="CourseMap">
+        SELECT
+        c.*,
+        t.name as teacher_name,
+        s.name as semester_name
+        FROM course c
+        LEFT JOIN teacher t ON c.teacher_id = t.id
+        LEFT JOIN semester s ON c.semester_id = s.id
+        WHERE c.teacher_id = #{teacherId}
+        <if test="courseName != null and courseName != ''">
+            AND c.name LIKE CONCAT('%', #{courseName}, '%')
+        </if>
+        <if test="schedule != null and schedule != ''">
+            AND c.schedule LIKE CONCAT('%', #{schedule}, '%')
+        </if>
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="findStudentsByCourseId" resultType="com.dhw.courseselectionsystem.pojo.vo.CourseStudentVO">
+        SELECT
+            s.id AS studentId,
+            s.student_no AS studentNo,
+            s.name AS studentName,
+            s.major,
+            s.class_name AS className,
+            cs.score
+        FROM course_selection cs
+                 JOIN student s ON cs.student_id = s.id
+        WHERE cs.course_id = #{courseId} AND cs.status = 0
+        ORDER BY s.student_no
+    </select>
+
+
+    <select id="listForAdmin" resultMap="CourseMap">
+        SELECT
+        c.*,
+        t.name as teacher_name,
+        s.name as semester_name
+        FROM course c
+        LEFT JOIN teacher t ON c.teacher_id = t.id
+        LEFT JOIN semester s ON c.semester_id = s.id
+        <where>
+            <if test="name != null and name != ''">
+                AND c.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="teacherId != null">
+                AND c.teacher_id = #{teacherId}
+            </if>
+            <if test="semesterId != null">
+                AND c.semester_id = #{semesterId}
+            </if>
+        </where>
+        ORDER BY c.id DESC
+    </select>
+
+    <insert id="insertCourse" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO course (course_code, name, credit, max_students, current_students, teacher_id, semester_id, schedule, status)
+        VALUES (#{courseCode}, #{name}, #{credit}, #{maxStudents}, #{currentStudents}, #{teacherId}, #{semesterId}, #{schedule}, #{status})
+    </insert>
+
+    <update id="updateCourse">
+        UPDATE course
+        <set>
+            <if test="courseCode != null">course_code = #{courseCode},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="credit != null">credit = #{credit},</if>
+            <if test="maxStudents != null">max_students = #{maxStudents},</if>
+            <if test="teacherId != null">teacher_id = #{teacherId},</if>
+            <if test="semesterId != null">semester_id = #{semesterId},</if>
+            <if test="schedule != null">schedule = #{schedule},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCourseById">
+        DELETE FROM course WHERE id = #{id}
+    </delete>
+
+</mapper>
