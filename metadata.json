@@ -1,6 +1,0 @@
-{
-  "name": "校园共享研讨室预约系统",
-  "description": "提供研讨室预约、签到及统计功能的轻量级校园系统。",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["Firebase Authentication", "Firestore Database"]
-}
