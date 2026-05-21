@@ -1,0 +1,102 @@
+# =====================
+#  Gradle / Maven 构建输出（递归匹配所有模块）
+# =====================
+**/build/
+**/target/
+**/out/
+**/bin/
+
+# 保留 wrapper 关键文件
+!gradle/wrapper/gradle-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# Gradle 缓存 / 守护进程目录
+.gradle/
+gradle-app.setting
+
+# Maven 本地仓库日志
+mvnw.log
+
+# =====================
+#  Java 编译产物
+# =====================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# =====================
+#  IntelliJ IDEA（全量覆盖）
+# =====================
+.idea/
+*.iws
+*.iml
+*.ipr
+*.idea/
+**/.idea/
+
+# =====================
+#  Eclipse / NetBeans（可选，但加上了更通用）
+# =====================
+.classpath
+.project
+.settings/
+*.prefs
+
+# =====================
+#  Vue / Node.js 前端
+# =====================
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/coverage/
+**/.vite/
+**/cache/
+**/.cache/
+
+# 前端构建临存
+*.log
+*.lock
+*-lock.yaml
+pnpm-lock.yaml
+package-lock.json  
+yarn.lock          
+
+# =====================
+#  操作系统 / 编辑器临时文件
+# =====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# =====================
+#  日志 / 环境变量 / 敏感配置
+# =====================
+*.log
+*.pid
+.env
+.env.local
+.env.*.local
+.secrets
+*.pem
+*.key
+*.crt
+
+# =====================
+#  其他工具生成物
+# =====================
+**/.terraform/
+**/.serverless/
+**/.serverless_plugins/
+**/jspm_packages/
