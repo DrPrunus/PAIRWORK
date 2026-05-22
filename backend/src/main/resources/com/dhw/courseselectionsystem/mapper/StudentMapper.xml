@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhw.courseselectionsystem.mapper.StudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.dhw.courseselectionsystem.pojo.entity.Student">
+        <id column="id" property="id"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="major" property="major"/>
+        <result column="class_name" property="className"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+
+    <!-- 动态分页查询 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM student
+        <where>
+            <if test="studentNo != null and studentNo != ''">
+                AND student_no LIKE CONCAT('%', #{studentNo}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="major != null and major != ''">
+                AND major LIKE CONCAT('%', #{major}, '%')
+            </if>
+            <if test="className != null and className != ''">
+                AND class_name LIKE CONCAT('%', #{className}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM student WHERE id = #{id}
+    </select>
+
+    <select id="findByStudentNo" resultMap="BaseResultMap">
+        SELECT * FROM student WHERE student_no = #{studentNo}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student (student_no, name, gender, major, class_name, phone)
+        VALUES (#{studentNo}, #{name}, #{gender}, #{major}, #{className}, #{phone})
+    </insert>
+
+    <update id="update">
+        UPDATE student
+        SET student_no = #{studentNo},
+            name = #{name},
+            gender = #{gender},
+            major = #{major},
+            class_name = #{className},
+            phone = #{phone}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+</mapper>
