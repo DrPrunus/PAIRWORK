@@ -5,7 +5,7 @@ import com.dhw.courseselectionsystem.mapper.UserMapper;
 import com.dhw.courseselectionsystem.pojo.entity.User;
 import com.dhw.courseselectionsystem.service.UserService;
 import com.dhw.courseselectionsystem.utils.JwtUtils;
-import com.dhw.courseselectionsystem.utils.MD5Utils;  // 添加这行导入
+import com.dhw.courseselectionsystem.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +24,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new BusinessException("用户名不存在");
         }
-
-        // 修复：将传入的明文密码进行MD5加密后再比较
-        String encryptedPassword = MD5Utils.md5(password);
-        if (!user.getPassword().equals(encryptedPassword)) {
+        String md5Password = MD5Utils.md5(password);
+        if (!user.getPassword().equals(md5Password)) {
             throw new BusinessException("密码错误");
         }
-
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("role", user.getRole());
